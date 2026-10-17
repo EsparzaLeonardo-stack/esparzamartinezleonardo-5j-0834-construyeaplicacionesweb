@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es" id="arriba">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cinepolis</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background-color:#fff;color:#080808;font-family:Arial,sans-serif;scroll-behavior:smooth}
+nav{width:100%;display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-start;background:#fff;padding:12px 40px}
+.logo-inicio{text-decoration:none;color:#001436;margin-right:15px;cursor:pointer}
+.logo-inicio h1{margin:0;padding:0;font-size:1.5rem;color:#001436;font-family:"Arial Black",sans-serif}
+nav a.nav-link,nav span.nav-link,nav button.nav-link{font-family:'Century Gothic',sans-serif;color:#010132;border:2px solid #fff;background:none;padding:6px 14px;border-radius:8px;text-decoration:none;font-weight:700;font-size:0.85rem;text-transform:uppercase;display:inline-block;cursor:pointer}
+nav a.nav-link:hover,nav span.nav-link:hover,nav button.nav-link:hover{background:#001436;color:#fff}
+.hero-banner{background-color:#020b1e;color:#fff;padding:40px 60px;display:flex;align-items:center;justify-content:space-between;gap:30px;min-height:400px}
+.hero-info{max-width:450px}
+.hero-info h2{font-family:"Arial Black",sans-serif;font-size:2.2rem;margin:0 0 15px 0;line-height:1.2}
+.hero-info p{font-size:1rem;line-height:1.5;color:#d0d7e5;margin-bottom:25px}
+.hero-poster{width:450px;height:280px;border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-poster img{width:100%;height:100%;object-fit:cover;border-radius:16px}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,20,54,0.7);z-index:1000;justify-content:center;align-items:center}
+.modal-overlay:target{display:flex}
+.club-container{position:relative;max-width:420px;width:90%;background:#fff;padding:30px;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,0.3)}
+.close-btn{position:absolute;top:15px;right:20px;text-decoration:none;font-size:1.5rem;font-weight:bold;color:#64748b}
+.close-btn:hover{color:#001436}
+.club-container h3{margin:0 0 10px 0;color:#001436;font-size:1.4rem;text-align:center}
+.club-container p{margin:0 0 20px 0;color:#64748b;font-size:0.85rem;text-align:center}
+.form-group{margin-bottom:15px}
+.form-group label{display:block;font-size:0.8rem;font-weight:bold;color:#1e293b;margin-bottom:5px}
+.form-group input{width:100%;padding:10px 14px;border:1px solid #cbd5e1;border-radius:8px;font-size:0.9rem;outline:none}
+.form-group input:focus{border-color:#2563eb}
+.btn-club{width:100%;background:#001436;color:#fff;border:none;padding:12px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:0.9rem;margin-top:10px}
+.btn-club:hover{background:#2563eb}
+.mensaje-exito{display:none;color:#16a34a;font-weight:bold;text-align:center;margin-top:15px;font-size:1.1rem}
+.cartelera-section{max-width:1200px;margin:40px auto;padding:0 20px}
+.cartelera-tabs{display:flex;justify-content:center;gap:40px;border-bottom:2px solid #e5e7eb;margin-bottom:30px}
+.tab{font-size:1.3rem;font-weight:bold;color:#111827;padding-bottom:10px;cursor:pointer;text-decoration:none}
+.tab.active{color:#2563eb;border-bottom:3px solid #2563eb}
+.movies-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:25px}
+.movie-card{display:flex;flex-direction:column;gap:8px}
+.poster-placeholder{width:100%;height:250px;background-color:#e2e8f0;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#64748b;font-size:0.85rem;text-align:center;overflow:hidden}
+.poster-placeholder img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+.movie-title{font-size:0.95rem;font-weight:bold;color:#0f172a;margin:5px 0 0 0;line-height:1.2}
+.badge-clasificacion{display:inline-block;background-color:#f59e0b;color:#fff;font-weight:bold;font-size:0.75rem;padding:2px 6px;border-radius:4px;width:fit-content}
+.link-sinopsis{color:#2563eb;text-decoration:none;font-size:0.8rem;font-weight:bold}
+.link-sinopsis:hover{text-decoration:underline}
+footer{background-color:#020b1e;color:#fff;padding:60px 40px 30px 40px;margin-top:60px;font-family:Arial,sans-serif}
+.footer-logo{text-align:center;margin-bottom:40px}
+.footer-logo span{font-family:"Arial Black",sans-serif;font-size:2rem;color:#fff;letter-spacing:1px}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:30px;max-width:1200px;margin:0 auto;padding-bottom:40px}
+.footer-col h4{color:#fff;font-size:1rem;margin-bottom:20px;font-weight:bold}
+.footer-col ul{list-style:none;padding:0;margin:0}
+.footer-col ul li{margin-bottom:12px}
+.footer-col ul li a{color:#9ca3af;text-decoration:none;font-size:0.85rem}
+.footer-col ul li a:hover{color:#fff}
+</style>
+</head>
+<body>
+<nav>
+<a href="#arriba" class="logo-inicio"><h1>cinépolis</h1></a>
+<span class="nav-link">Películas</span>
+<span class="nav-link">Alimentos</span>
+<a href="#modal-club" class="nav-link">Club Cinépolis</a>
+<span class="nav-link">Promos</span>
+<span class="nav-link">Especiales</span>
+<span class="nav-link">Coleccionables</span>
+</nav>
+<div id="modal-club" class="modal-overlay">
+<div class="club-container">
+<a href="#" class="close-btn">&times;</a>
+<h3>Club Cinépolis</h3>
+<p>Ingresa con tu número de tarjeta o correo electrónico para acceder a tus beneficios.</p>
+<form id="form-club" onsubmit="procesarIngreso(event)">
+<div class="form-group">
+<label>Número de Tarjeta / Correo</label>
+<input type="text" placeholder="Ej. 1010001234567890" required>
+</div>
+<div class="form-group">
+<label>Contraseña / NIP</label>
+<input type="password" placeholder="••••••••" required>
+</div>
+<button type="submit" class="btn-club">Ingresar a mi cuenta</button>
+</form>
+<div id="mensaje-exito" class="mensaje-exito">Listo</div>
+</div>
+</div>
+<section class="hero-banner">
+<div class="hero-info">
+<h2>¡Tu 2x1 semanal te espera!</h2>
+<p>Además acumula puntos Club Cinépolis dentro y fuera de cine. Sin anualidad, 100% digital y respuesta en minutos.</p>
+</div>
+<div class="hero-poster">
+<img src="https://pimcore-content.cinepolis.com/assets/Mexico/Sliders/Principal/Es/10_DESKTOP_V03_TDC_2x1_800x600.png" alt="Tarjeta de Crédito Cinépolis Openbank 2x1">
+</div>
+</section>
+<section class="cartelera-section">
+<div class="cartelera-tabs"><span class="tab active">Cartelera</span><span class="tab">Horarios</span></div>
+<div class="movies-grid">
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/StreetFighter/Es/sf_desktop_poster_720x1022_2.jpg" alt="Street Fighter"></div><h3 class="movie-title">Street Fighter</h3><span class="badge-clasificacion">B</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/LaCaidaDeLaBallena/Es/19_Poster_720x1022px__5.jpg" alt="La Caída De La Ballena"></div><h3 class="movie-title">La Caída De La Ballena</h3><span class="badge-clasificacion">B</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/ElLaberintoDelFauno/Es/Poster_WEB_Desktop_720x1022px_43__2.jpg" alt="El Laberinto Del Fauno"></div><h3 class="movie-title">El Laberinto Del Fauno</h3><span class="badge-clasificacion" style="background-color: #d97706;">B15</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/ElCorazonDeLaBestia/Es/720x1022_24.jpg" alt="El Corazón De La Bestia"></div><h3 class="movie-title">El Corazón De La Bestia</h3><span class="badge-clasificacion">B</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/VerityLaSombraDeUnEngano/Es/VRTY_2026_Desktop_Cinepolis_Poster_720x1022_2.jpg" alt="Verity: La Sombra De Un Engaño"></div><h3 class="movie-title">Verity: La Sombra De Un Engaño</h3><span class="badge-clasificacion" style="background-color: #d97706;">B15</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/Digger/Es/720x1022_28.jpg" alt="Digger"></div><h3 class="movie-title">Digger</h3><span class="badge-clasificacion" style="background-color: #d97706;">B15</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/MadreSiniestra/Es/20_Po_ster_720x1022px__2.jpg" alt="Madre Siniestra"></div><h3 class="movie-title">Madre Siniestra</h3><span class="badge-clasificacion">B</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/LaIslaDeLasMunecas/Es/IDLM_Poster_720X1022_2.jpg" alt="La Isla De Las Muñecas"></div><h3 class="movie-title">La Isla De Las Muñecas</h3><span class="badge-clasificacion">B</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/SuperCanino/Es/Poster_720x1022_2.jpg" alt="Súper Canino"></div><h3 class="movie-title">Súper Canino</h3><span class="badge-clasificacion" style="background-color: #10b981;">A</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/TuNombre/Es/Poster_WEB_Desktop_720x1022px_35__2.jpg" alt="Tu Nombre"></div><h3 class="movie-title">Tu Nombre</h3><span class="badge-clasificacion" style="background-color: #6b7280;">TBC</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/HopeElPrimerImpacto/Es/HOPE_Cinepolis_MX_DESKTOP_720_x_1022_2.jpg" alt="Hope: El Primer Impacto"></div><h3 class="movie-title">Hope: El Primer Impacto</h3><span class="badge-clasificacion" style="background-color: #d97706;">B15</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/ResidentEvilNocheCero/Es/RE_720x1022_2.jpg" alt="Resident Evil: Noche Cero"></div><h3 class="movie-title">Resident Evil: Noche Cero</h3><span class="badge-clasificacion" style="background-color: #d97706;">B15</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/UnMalPartido/Es/19_Poster_720x1022px__5.jpg" alt="Un Mal Partido"></div><h3 class="movie-title">Un Mal Partido</h3><span class="badge-clasificacion" style="background-color: #6b7280;">TBC</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/Cristiada/Es/Poster_WEB_Desktop_720x1022px_2.jpg" alt="Cristiada"></div><h3 class="movie-title">Cristiada</h3><span class="badge-clasificacion">B</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/ElArbolMagico/Es/720_copia_2_.jpg" alt="El Árbol Mágico"></div><h3 class="movie-title">El Árbol Mágico</h3><span class="badge-clasificacion" style="background-color: #10b981;">A</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/CoyoteVsAcme/Es/Poster_720x1022_2.jpg" alt="Coyote Vs Acme"></div><h3 class="movie-title">Coyote Vs Acme</h3><span class="badge-clasificacion" style="background-color: #10b981;">A</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/SacrificioLosElegidos/Es/Poster_720x1022_S_2.jpg" alt="Sacrificio: Los Elegidos"></div><h3 class="movie-title">Sacrificio: Los Elegidos</h3><span class="badge-clasificacion">B</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/ElFinal/Es/P_ster_720x1022px_2.jpg" alt="El Final"></div><h3 class="movie-title">El Final</h3><span class="badge-clasificacion" style="background-color: #6b7280;">TBC</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/AlwaysLalisa/Es/Poster_WEB_Desktop_720x1022px_33_copia.jpg" alt="Always Lalisa"></div><h3 class="movie-title">Always Lalisa</h3><span class="badge-clasificacion" style="background-color: #6b7280;">TBC</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/ElPoderDeLaRed/Es/720x1022_25.jpg" alt="El Poder De La Red"></div><h3 class="movie-title">El Poder De La Red</h3><span class="badge-clasificacion">B</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/Clayface/Es/P_720X1022_5.jpg" alt="Clayface"></div><h3 class="movie-title">Clayface</h3><span class="badge-clasificacion" style="background-color: #dc2626;">C</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/AvengersEndgameBonus/Es/19_Poster_720x1022px__5.jpg" alt="Avengers: Endgame Bonus"></div><h3 class="movie-title">Avengers: Endgame Bonus</h3><span class="badge-clasificacion">B</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/AvengersEndgameBonusInfinityVision/Es/19_Poster_720x1022px_v2_2.jpg" alt="Avengers: Endgame Bonus Infinity Vision"></div><h3 class="movie-title">Avengers: Endgame Bonus Infinity Vision</h3><span class="badge-clasificacion">B</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/AvengersDoomsdayInfinityVision/Es/19_Poster_720x1022px__5.jpg" alt="Avengers: Doomsday Infinity Vision"></div><h3 class="movie-title">Avengers: Doomsday Infinity Vision</h3><span class="badge-clasificacion" style="background-color: #6b7280;">TBC</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/AvengersDoomsday/Es/19_Poster_720x1022px_2_2.jpg" alt="Avengers: Doomsday"></div><h3 class="movie-title">Avengers: Doomsday</h3><span class="badge-clasificacion" style="background-color: #6b7280;">TBC</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/LaVenganzaDelCharroNegro/Es/720x1022_copia_5.jpg" alt="La Venganza Del Charro Negro"></div><h3 class="movie-title">La Venganza Del Charro Negro</h3><span class="badge-clasificacion" style="background-color: #10b981;">A</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/ElBosqueSalvajeWildwood/Es/Wildwood_720x1022_2.jpg" alt="El Bosque Salvaje: Wildwood"></div><h3 class="movie-title">El Bosque Salvaje: Wildwood</h3><span class="badge-clasificacion" style="background-color: #6b7280;">TBC</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+<div class="movie-card"><div class="poster-placeholder"><img src="https://pimcore-content.cinepolis.com/assets/Mexico/Tickets/Movies/GodzillaMinusZero/Es/Poster_720x1022_Godzilla_5ago1_2.jpg" alt="Godzilla Minus Zero"></div><h3 class="movie-title">Godzilla Minus Zero</h3><span class="badge-clasificacion" style="background-color: #6b7280;">TBC</span><a href="#" class="link-sinopsis">Ver sinopsis</a></div>
+</div>
+</section>
+<footer>
+<div class="footer-logo">
+<span>C</span>
+</div>
+<div class="footer-grid">
+<div class="footer-col">
+<h4>Cartelera</h4>
+<ul>
+<li><a href="#">Garantía Cinépolis</a></li>
+<li><a href="#">+Que Cine</a></li>
+<li><a href="#">Muestras y festivales</a></li>
+<li><a href="#">Paloma & Nacho</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Legales</h4>
+<ul>
+<li><a href="#">Términos y condiciones</a></li>
+<li><a href="#">Términos y condiciones Cineticket</a></li>
+<li><a href="#">Aviso de privacidad</a></li>
+<li><a href="#">Términos Cinecash</a></li>
+<li><a href="#">Términos y Condiciones Garantía</a></li>
+<li><a href="#">Formato de reclamo Garantía Cinépolis</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Políticas</h4>
+<ul>
+<li><a href="#">Políticas</a></li>
+<li><a href="#">Línea de Denuncia</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>¿Quiénes somos?</h4>
+<ul>
+<li><a href="#">Próximas Aperturas</a></li>
+<li><a href="#">Ventas Corporativas</a></li>
+<li><a href="#">Proveedores</a></li>
+<li><a href="#">Cinépolis Jobs</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Contacto</h4>
+<ul>
+<li><a href="#">Atención a clientes</a></li>
+<li><a href="#">T. 552 122 6060</a></li>
+<li><a href="#">aac@atencioncinepolis.com</a></li>
+<li><a href="#">@AyudaCinepolis</a></li>
+<li><a href="#">Déjanos tus comentarios</a></li>
+<li><a href="#">Facturación electrónica</a></li>
+</ul>
+</div>
+</div>
+</footer>
+<script>
+function procesarIngreso(e){
+e.preventDefault();
+document.getElementById('mensaje-exito').style.display='block';
+setTimeout(function(){
+window.location.hash='';
+document.getElementById('mensaje-exito').style.display='none';
+document.getElementById('form-club').reset();
+},2000);
+}
+</script>
+</body>
+</html>
